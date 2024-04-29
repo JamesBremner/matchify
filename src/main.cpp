@@ -2,6 +2,9 @@
 
 main()
 {
+    if( ! cMatcher::unitTest() )
+        exit(1);
+
     // generate problem
     theClub.generate2();
 

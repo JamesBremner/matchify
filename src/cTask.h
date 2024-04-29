@@ -110,6 +110,7 @@ public:
     std::vector<int> myGames;       /// indices of the scheduled games
 
 
+    static void clear();
     void generate1();
     void generate2();
 
@@ -121,6 +122,8 @@ public:
     void maxflow();
     void checkPlayerGames();
     void display();
+
+    static bool unitTest();
 };
 
 extern std::vector<cPlayer> thePlayers;

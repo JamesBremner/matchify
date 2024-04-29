@@ -23,6 +23,7 @@ OBJ_starter = \
 	$(ODIR)/main.o \
 	$(ODIR)/cTask.o \
 	$(ODIR)/cPlayer.o \
+	$(ODIR)/cMatcher.o \
 	$(ODIR)/cGraph.o \
 	$(ODIR)/GraphTheory.o \
 
