@@ -1,2 +1,3 @@
-# starter
-Starter template repository
+# Matchify
+
+Schedule pairs at convenient times on available resources.
