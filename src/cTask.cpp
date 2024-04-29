@@ -146,14 +146,14 @@ void cMatcher::check()
         bool ok = false;
 
         // loop over player available times
-        for (int t : p.myTimes)
+        for (int t : p.getTimes())
         {
             // loop over player possible opponents
-            for (auto &os : p.myOpps)
+            for (auto &os : p.getOpps())
             {
                 // loop over opponents available times
                 int oi = findPlayer(os);
-                for (int ot : thePlayers[oi].myTimes)
+                for (int ot : thePlayers[oi].getTimes())
                 {
                     if (t == ot)
                     {

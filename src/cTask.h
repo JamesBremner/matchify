@@ -8,10 +8,13 @@
 
 class cPlayer
 {
-public:
-    std::string myName;                     // name
     std::vector<int> myTimes;               // available times
     std::vector<std::string> myOpps;        // names of possible opponents
+
+public:
+    std::string myName;                     // name
+
+    
     int myMaxGames;                         // maximum games that can be played
     int myCountGames;                       // games scheduled
 
@@ -21,19 +24,39 @@ public:
     {
     }
 
-    void addTime(int t)
-    {
-        myTimes.push_back(t);
-    }
+    /** @brief Add an available time
+     @param t 
 
-    void addOpp(const std::string &opp)
-    {
-        myOpps.push_back(opp);
-    }
+    Player can only be matched at one of these times
+
+    All times are an hour in the same week
+
+    e.g. 210 means 10am on Tuesday
+    */
+
+    void addTime(int t);
+
+    /** @brief Add a possible opponent
+     @param opp opponent name
+
+    Player can only be matched with opponents of these name
+    */
+
+    void addOpp(const std::string &opp);
+
 
     bool operator==(std::string &name)
     {
         return myName == name;
+    }
+
+    const std::vector<int>& getTimes() const
+    {
+        return myTimes;
+    }
+    const std::vector<std::string>& getOpps() const
+    {
+        return myOpps;
     }
 };
 
