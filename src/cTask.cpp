@@ -49,56 +49,12 @@ void cGame::display()
 {
     std::cout << p1->myName
               << " v " << p2->myName
-              << " at " << myt
+              << " at " << cMatcher::decodeTime(myt)
               << " on " << myCourt->myName
               << "\n";
 }
 
-void cMatcher::generate1()
-{
-    // generate players
-    thePlayers.emplace_back("pA");
-    thePlayers.emplace_back("pB");
 
-    // add possible opponents
-    thePlayers[0].addOpp("pB");
-    thePlayers[1].addOpp("pA");
-
-    // add available times
-    thePlayers[0].addTime(1);
-    thePlayers[0].addTime(3);
-    thePlayers[0].addTime(2);
-    thePlayers[1].addTime(2);
-    thePlayers[1].addTime(3);
-
-    // generate court times
-    theCourts.emplace_back("cA", 1);
-    theCourts.emplace_back("cA", 2);
-    theCourts.emplace_back("cA", 3);
-}
-void cMatcher::generate2()
-{
-    // generate players
-    thePlayers.emplace_back("pA");
-    thePlayers.emplace_back("pB");
-
-    // add possible opponents
-    thePlayers[0].addOpp("pB");
-    thePlayers[1].addOpp("pA");
-
-    // add available times
-    thePlayers[0].addTime(1);
-    thePlayers[0].addTime(2);
-    thePlayers[1].addTime(1);
-    thePlayers[1].addTime(2);
-
-    // generate court times
-    theCourts.emplace_back("cA", 1);
-    theCourts.emplace_back("cA", 2);
-
-    // set time priority
-    theClub.timePriority( 2, 1 );
-}
 void cMatcher::timePriority( int t, int p )
 {
     myPriorityTimes.emplace_back( std::make_pair(t,p));
@@ -121,72 +77,9 @@ void cMatcher::sortTimePriority()
             return this->priority(a.myt) > this->priority(b.myt);
         });
 }
-int findPlayer(const std::string &name)
-{
-    for (int ip = 0; ip < thePlayers.size(); ip++)
-        if (thePlayers[ip].myName == name)
-            return ip;
-    return -1;
-}
 
-/**
- * @brief Check for feasibility
- *
- * i.e. every player has at least one opponent with a matching available time and possible court time
- */
-void cMatcher::check()
-{
-    // loop over players
-    int pi = -1;
-    for (auto &p : thePlayers)
-    {
-        pi++;
 
-        // assume that player has no possible opponent with matching time
-        bool ok = false;
 
-        // loop over player available times
-        for (int t : p.getTimes())
-        {
-            // loop over player possible opponents
-            for (auto &os : p.getOpps())
-            {
-                // loop over opponents available times
-                int oi = findPlayer(os);
-                for (int ot : thePlayers[oi].getTimes())
-                {
-                    if (t == ot)
-                    {
-                        // loop over court times
-                        for (auto &c : theCourts)
-                        {
-                            if (t == c.myTime)
-                            {
-                                // found a match with opponent and court
-
-                                ok = true;
-
-                                // create a task for each feasible pair
-                                // only record task when player 1 index less than player 2
-                                if (pi < oi)
-                                {
-                                    myFeasibleGames.emplace_back(p, thePlayers[oi], t, c);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if (!ok)
-        {
-            std::cout << "Cannot find opponent for " << p.myName << "\n";
-            exit(1);
-        }
-    }
-    std::cout << "found feasible opponents for all players\n";
-    cGame::displayAll();
-}
 void cMatcher::maxflow()
 {
     myGames.clear();

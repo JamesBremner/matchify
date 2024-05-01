@@ -5,33 +5,36 @@
 #include <vector>
 #include <algorithm>
 
-
 class cPlayer
 {
-    std::vector<int> myTimes;               // available times
-    std::vector<std::string> myOpps;        // names of possible opponents
+    std::vector<int> myTimes;        // available times
+    std::vector<std::string> myOpps; // names of possible opponents
 
 public:
-    std::string myName;                     // name
+    std::string myName; // name
 
-    
-    int myMaxGames;                         // maximum games that can be played
-    int myCountGames;                       // games scheduled
+    int myMaxGames;   // maximum games that can be played
+    int myCountGames; // games scheduled
 
     cPlayer(const std::string name)
         : myName(name),
-        myMaxGames( 0 )
+          myMaxGames(0)
     {
     }
 
+    void clear();
+
     /** @brief Add an available time
-     @param t 
+     @param t
 
     Player can only be matched at one of these times
 
     All times are an hour in the same week
 
     e.g. 210 means 10am on Tuesday
+
+    If this is never called, assumes player can be matched at any time
+
     */
 
     void addTime(int t);
@@ -44,17 +47,14 @@ public:
 
     void addOpp(const std::string &opp);
 
-
     bool operator==(std::string &name)
     {
         return myName == name;
     }
 
-    const std::vector<int>& getTimes() const
-    {
-        return myTimes;
-    }
-    const std::vector<std::string>& getOpps() const
+    const std::vector<int> &getTimes() const;
+
+    const std::vector<std::string> &getOpps() const
     {
         return myOpps;
     }
@@ -98,32 +98,40 @@ public:
         const std::string &p2);
     static std::string nextName();
     static cGame &get(int index);
-
 };
 
 class cMatcher
 {
-    std::vector<std::pair<int,int>> myPriorityTimes;
-    
+    std::vector<std::pair<int, int>> myPriorityTimes;
+
 public:
     std::vector<cGame> myFeasibleGames;
-    std::vector<int> myGames;       /// indices of the scheduled games
+    std::vector<int> myGames; /// indices of the scheduled games
 
-
-    static void clear();
+    void clear();
     void generate1();
     void generate2();
 
     void timePriority(int t, int p);
-    int priority( int t ) const;
+    int priority(int t) const;
     void sortTimePriority();
 
+    /**
+     * @brief Check for feasibility
+     *
+     * i.e. every player has at least one opponent with a matching available time and possible court time
+     */
     void check();
+
     void maxflow();
     void checkPlayerGames();
     void display();
 
     static bool unitTest();
+    static std::string decodeTime(int t);
+
+private:
+    static bool isTimeMatch( int t1, int t2 );
 };
 
 extern std::vector<cPlayer> thePlayers;
